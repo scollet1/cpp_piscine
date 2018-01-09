@@ -30,14 +30,14 @@ int main(int ac, char **av)
 {
   int i;
 
-  if (ac >= 1)
+  if (ac >= 2)
     for (i = 1; av[i]; i++)
     {
       big_fucking_letters(av[i]);
       std::cout << " ";
     }
   else
-    big_fucking_letters("* LOUD AND UNBEARABLE FEEDBACK NOISE *\n");
+    big_fucking_letters("* LOUD AND UNBEARABLE FEEDBACK NOISE *");
   std::cout << std::endl;
   return (0);
 }

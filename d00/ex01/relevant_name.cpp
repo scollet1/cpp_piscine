@@ -135,15 +135,17 @@ void search(Relevant_data *p)
 
   std::cout << "what index do u want lol\n";
   std::cin >> i;
-  if (!std::cin.good())
+  if (!std::cin.good() || (i >= D_SIZE || i < 0))
   {
     std::cout << "that doesn't work\n";
+    std::cin.clear();
     std::cin.ignore(INT_MAX, '\n');
     return ;
   }
   if (!p[i].empty)
   {
     std::cout << "user doesn't exist\n";
+    std::cin.clear();
     std::cin.ignore(INT_MAX, '\n');
     return ;
   }
@@ -203,8 +205,10 @@ void search(Relevant_data *p)
 
 int main(void)
 {
+  bool user;
+  std::string buf;
   std::string option;
-  Relevant_data *p = new Relevant_data[D_SIZE];
+  Relevant_data p[D_SIZE];
   while (1)
   {
     display_opt();
@@ -213,17 +217,24 @@ int main(void)
     {
       Relevant_data d;
       add(d, p);
+      user = true;
+      continue ;
     }
     else if (!option.compare("SEARCH"))
     {
-      search(p);
+      if (user)
+        search(p);
+      else
+        std::cout
+        << "No one in database, trying ADDing"
+        << std::endl;
+      continue ;
     }
     else if (!option.compare("EXIT"))
     {
       std::cout << "see ya\n";
       break ;
     }
-
   }
   return (0);
 }
