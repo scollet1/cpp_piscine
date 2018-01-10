@@ -10,7 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ctime>
+#include <ios>
+#include <time.h>
+#include <iomanip>
 #include <iostream>
 #include "Account.class.hpp"
 
@@ -24,15 +26,14 @@ void	Account::_displayTimestamp(void)
   time_t t = time(0);
   struct tm *now = localtime(&t);
 
-  std::cout
-  << "["
+  std::cout << "["
   << (now->tm_year + 1900)
-  << (now->tm_mon + 1)
-  << now->tm_mday
+  << std::setfill('0') << std::setw(2) << (now->tm_mon + 1)
+  << std::setfill('0') << std::setw(2) << now->tm_mday
   << "_"
-  << now->tm_hour
-  << now->tm_min
-  << now->tm_sec
+  << std::setfill('0') << std::setw(2) << now->tm_hour
+  << std::setfill('0') << std::setw(2) << now->tm_min
+  << std::setfill('0') << std::setw(2) << now->tm_sec
   << "] ";
   return ;
 }
