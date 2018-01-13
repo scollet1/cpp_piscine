@@ -10,15 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-class Player {
-public:
-  Player(void);
-  ~Player(void);
-
-  int getPos(void);
-private:
-}
-
-class Enemy {
-
-}
+#include <iostream>
+// 
+// class Character {
+// public:
+//   Character(void);
+//   ~Character(void);
+//
+//   int getPos(std::string pos);
+// };
+//
+// class Player : public Character {
+// public:
+//   Player(void);
+//   ~Player(void);
+//
+// private:
+// };
+//
+// class Enemy : public Character {
+//
+// };

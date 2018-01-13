@@ -27,12 +27,36 @@ Game::Game(void)
 	init_pair(5, COLOR_RED, COLOR_BLACK);
 	init_pair(6, COLOR_RED, COLOR_GREEN);
 	init_pair(7, COLOR_RED, COLOR_RED);
+  this->_running = true;
   return ;
 }
 
 Game::~Game(void)
 {
+  for(int i = 0; i < 1; ++i)
+    delete this->map[i];
   return ;
+}
+
+void Game::buildMap(int sizeX, int sizeY)
+{
+  int i;
+  this->map = new char*[sizeY];
+
+  for (i = 0; i < sizeY; ++i)
+    this->map[i] = new char[sizeX];
+  return ;
+}
+
+void Game::setMap(int X, int Y, char c)
+{
+  this->map[X][Y] = c;
+  return ;
+}
+
+char Game::getMap(int X, int Y)
+{
+  return this->map[X][Y];
 }
 
 bool Game::isRunning(void)
@@ -50,39 +74,11 @@ void Game::terminate(int err)
 
 void Game::keyCommand(int num)
 {
-  switch(num)
-  {
-    case KEY_UP:
-      if(game.getPlayer().getPos("Y") - 1 > 1)
-      {
-        map[posY][posX] = ' ';
-        map[posY][posX+1] = ' ';
-        --posY;
-      }
-      break;
-    case KEY_DOWN:
-      if(posY + 1 < 23)
-      {
-        map[posY][posX] = ' ';
-        map[posY][posX+1] = ' ';
-        ++posY;
-      }
-      break;
-    case ' ':
-      if(bullet_stabilizer >= 10)
-      {
-        bullets[bulletIndex].is_moving = true;
-        bullets[bulletIndex].posX = posX + 2;
-        bullets[bulletIndex].posY = posY;
-        if(bulletIndex == 9) bulletIndex = 0;
-        else ++bulletIndex;
-        bullet_stabilizer = 0;
-      }
-      break;
-    case 27:
-      return ;
-      break;
-    default:
-      break;
-  }
+  num = 0;
+  return ;
 }
+//
+// Player & Game::getPlayer(void)
+// {
+//   return this->_player;
+// }

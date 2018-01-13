@@ -16,6 +16,7 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <iostream>
+#include "Character.hpp"
 
 class Game {
 public:
@@ -25,7 +26,12 @@ public:
   bool isRunning(void);
   void keyCommand(int num);
   void terminate(int err);
-  Character getPlayer(void);
+  // Player & getPlayer(void);
+  void setMap(int X, int Y, char c);
+  char getMap(int X, int Y);
+  void buildMap(int sizeX, int sizeY);
 private:
   bool _running;
+  // Player _player;
+  char **map;
 };

@@ -90,8 +90,8 @@ int main()
 	map[posY][posX+1] = '=';
 
 	//print a startup message
-	char text1[] = "Zombie survival!";
-	char text2[] = "Made by Strupe321";
+	char text1[] = "";
+	char text2[] = "";
 	char text3[] = "Press any key to start";
 	int maxX, maxY;
 	getmaxyx(stdscr, maxY, maxX);
