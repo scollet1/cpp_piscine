@@ -32,6 +32,57 @@ Game::Game(void)
 
 Game::~Game(void)
 {
-
   return ;
+}
+
+bool Game::isRunning(void)
+{
+  return this->_running;
+}
+
+void Game::terminate(int err)
+{
+  std::cout
+  << "Goodybe"
+  << std::endl;
+  exit(err);
+}
+
+void Game::keyCommand(int num)
+{
+  switch(num)
+  {
+    case KEY_UP:
+      if(game.getPlayer().getPos("Y") - 1 > 1)
+      {
+        map[posY][posX] = ' ';
+        map[posY][posX+1] = ' ';
+        --posY;
+      }
+      break;
+    case KEY_DOWN:
+      if(posY + 1 < 23)
+      {
+        map[posY][posX] = ' ';
+        map[posY][posX+1] = ' ';
+        ++posY;
+      }
+      break;
+    case ' ':
+      if(bullet_stabilizer >= 10)
+      {
+        bullets[bulletIndex].is_moving = true;
+        bullets[bulletIndex].posX = posX + 2;
+        bullets[bulletIndex].posY = posY;
+        if(bulletIndex == 9) bulletIndex = 0;
+        else ++bulletIndex;
+        bullet_stabilizer = 0;
+      }
+      break;
+    case 27:
+      return ;
+      break;
+    default:
+      break;
+  }
 }

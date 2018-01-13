@@ -22,9 +22,10 @@ public:
   Game(void);
   ~Game(void);
 
-  getMenu(void);
+  bool isRunning(void);
+  void keyCommand(int num);
+  void terminate(int err);
+  Character getPlayer(void);
 private:
-  const char menuText1[] = "ft_retro!";
-  const char menuText2[] = "SCollet:JChow";
-  const char menuText3[] = "~Press any key to start~";
+  bool _running;
 };

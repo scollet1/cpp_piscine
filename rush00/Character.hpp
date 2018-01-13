@@ -10,4 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+class Player {
+public:
+  Player(void);
+  ~Player(void);
 
+  int getPos(void);
+private:
+}
+
+class Enemy {
+
+}
