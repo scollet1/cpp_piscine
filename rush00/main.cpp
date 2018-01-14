@@ -46,28 +46,27 @@ int main(void)
   for(int i = 0; i < maxX; ++i)
          map[0][i] = ' ';
 
-     //loads map with top and bottom borders
-     for(int i = 0; i < maxX; ++i)
+  for(int i = 0; i < maxY; ++i)
+  {
+     map[i][1] = '#';
+     map[i][maxX - 2] = '#';
+  }
+  //loads map with the inner game field
+  for(int a = 2; a < maxY - 2; ++a)
+  {
+     for(int b = 0; b < maxX; ++b)
      {
-         map[1][i] = '#';
-         map[maxY - 2][i] = '#';
+         map[a][b] = ' ';
      }
-     //loads map with the inner game field
-     for(int a = 2; a < maxY - 2; ++a)
-     {
-         for(int b = 0; b < maxX; ++b)
-         {
-             map[a][b] = ' ';
-         }
-        //  map[a][maxY / 10] = '|';
-        //  map[a][maxY / 11] = '|';
-        //  map[a][maxY / 12] = '|';
-     }
-     for(int i = 0; i < maxX; ++i)
-         map[maxY - 1][i] = ' ';
+    //  map[a][maxY / 10] = '|';
+    //  map[a][maxY / 11] = '|';
+    //  map[a][maxY / 12] = '|';
+  }
+  for(int i = 0; i < maxX; ++i)
+     map[maxY - 1][i] = ' ';
 
-	map[posY][posX] = 'P';
-	map[posY][posX + 1] = '=';
+	map[posY][posX] = '^';
+	// map[posY][posX + 1] = '|';
   // std::srand(std::time(nullptr));
   // initscr();
   // start_color();
@@ -174,16 +173,16 @@ int main(void)
           // game->getPlayer().getPos("Y") - 1 > 1)
         {
           map[posY][posX] = ' ';
-          map[posY][posX + 1] = ' ';
-          --posY;
+          map[posY + 1][posX] = ' ';
+          --posX;
         }
         break;
       case KEY_RIGHT:
         if (posX + 1 < maxX)
         {
           map[posY][posX] = ' ';
-          map[posY][posX + 1] = ' ';
-          ++posY;
+          map[posY + 1][posX] = ' ';
+          ++posX;
         }
         break;
       case ' ':
@@ -203,8 +202,7 @@ int main(void)
       default:
         break;
     }
-    map[posY][posX] = 'P';
-		map[posY + 1][posX] = '|';
+    map[posY][posX] = '^';
 
 		for(int i = 0; i < maxY - 1; ++i)
 			map[0][i] = ' ';
@@ -215,8 +213,8 @@ int main(void)
 			for(int b = 0; b < maxX; b++)
 			{
 				if(map[a][b] == ' ') attron(COLOR_PAIR(1) | A_BOLD);
-				else if(map[a][b] == 'P') attron(COLOR_PAIR(2) | A_BOLD);
-				else if(map[a][b] == '=') attron(COLOR_PAIR(4));
+				else if(map[a][b] == '#') attron(COLOR_PAIR(2) | A_BOLD);
+				else if(map[a][b] == '|') attron(COLOR_PAIR(4));
 				else if(map[a][b] == '*') attron(COLOR_PAIR(4));
 				else if(map[a][b] == '@') attron(COLOR_PAIR(6));
 				else if(map[a][b] == '%') attron(COLOR_PAIR(7) | A_BOLD);
@@ -225,7 +223,7 @@ int main(void)
 				standend();
 			}
 			attron(COLOR_PAIR(2) | A_BOLD);
-			mvprintw(maxX-1, 0, "Zombies killed: %i", 0);
+			mvprintw(maxX - 1, 0, "Zombies killed: %i", 0);
 			attroff(COLOR_PAIR(2) | A_BOLD);
 
 		// for(int i=0; i < 100; ++i)
