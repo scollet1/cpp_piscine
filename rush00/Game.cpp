@@ -20,9 +20,9 @@ Game::Game(void)
 	cbreak();
 	noecho();
 	keypad(stdscr, TRUE);
-  init_pair(1, COLOR_GREEN, COLOR_GREEN);
-	init_pair(2, COLOR_WHITE, COLOR_GREEN);
-	init_pair(3, COLOR_YELLOW, COLOR_GREEN);
+  init_pair(1, COLOR_GREEN, COLOR_RED);
+	init_pair(2, COLOR_WHITE, COLOR_RED);
+	init_pair(3, COLOR_YELLOW, COLOR_BLUE);
 	init_pair(4, COLOR_BLACK, COLOR_GREEN);
 	init_pair(5, COLOR_RED, COLOR_BLACK);
 	init_pair(6, COLOR_RED, COLOR_GREEN);

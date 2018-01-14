@@ -15,59 +15,12 @@
 
 int main(void)
 {
-  /* Initialize curses */
-	// initscr();
-	// start_color();
-	// cbreak();
-	// noecho();
-	// keypad(stdscr, TRUE);
-
-	// srand(time(0));
-
   Game *game = new Game();
-	char map[1820][1400]; //the game map
-	int posY = 11, posX = 5; //the game characters coordinates
-	// int zombiespeed = 3; //how fast the zombies move
-	// int fences = 3; //amount of fences left (3 at startup)
-	// int zombie_index = 0;
-	// int zombie_spawnrate = 100; //how fast the zombies spawn
-	// int zombie_spawnbalancer = 0;
-	// int zombies_killed = 0;
+  int uIn;
+  bool quit = false;
 
-	//color initalizations
-	// init_pair(1, COLOR_GREEN, COLOR_GREEN);
-	// init_pair(2, COLOR_WHITE, COLOR_GREEN);
-	// init_pair(3, COLOR_YELLOW, COLOR_GREEN);
-	// init_pair(4, COLOR_BLACK, COLOR_GREEN);
-	// init_pair(5, COLOR_RED, COLOR_BLACK);
-	// init_pair(6, COLOR_RED, COLOR_GREEN);
-	// init_pair(7, COLOR_RED, COLOR_RED);
-
-	for(int i=0; i < 80; ++i)
-		map[0][i] = ' ';
-
-	//loads map with top and bottom borders
-	for(int i=0; i < 80; ++i)
-	{
-		map[1][i] = '#';
-		map[23][i] = '#';
-	}
-	//loads map with the inner game field
-	for(int a=2; a < 23; ++a)
-	{
-		for(int b=0; b < 80; ++b)
-		{
-			map[a][b] = ' ';
-		}
-		map[a][10] = '|';
-		map[a][11] = '|';
-		map[a][12] = '|';
-	}
-	for(int i=0; i < 80; ++i)
-		map[24][i] = ' ';
-
-	map[posY][posX] = 'P';
-	map[posY][posX+1] = '=';
+	char **map;
+	int posY = 11, posX = 5;
 
 	//print a startup message
 	char text1[] = "ft_retro";
@@ -87,6 +40,34 @@ int main(void)
 	getch();
 
 	curs_set(0);
+  map = new char*[maxY];
+  for (int i = 0; i < maxY; i++)
+    map[i] = new char[maxX];
+  for(int i = 0; i < maxX; ++i)
+         map[0][i] = ' ';
+
+     //loads map with top and bottom borders
+     for(int i = 0; i < maxX; ++i)
+     {
+         map[1][i] = '#';
+         map[maxY - 2][i] = '#';
+     }
+     //loads map with the inner game field
+     for(int a = 2; a < maxY - 2; ++a)
+     {
+         for(int b = 0; b < maxX; ++b)
+         {
+             map[a][b] = ' ';
+         }
+        //  map[a][maxY / 10] = '|';
+        //  map[a][maxY / 11] = '|';
+        //  map[a][maxY / 12] = '|';
+     }
+     for(int i = 0; i < maxX; ++i)
+         map[maxY - 1][i] = ' ';
+
+	map[posY][posX] = 'P';
+	map[posY][posX + 1] = '=';
   // std::srand(std::time(nullptr));
   // initscr();
   // start_color();
@@ -124,30 +105,31 @@ int main(void)
 	// init_pair(6, COLOR_RED, COLOR_GREEN);
 	// init_pair(7, COLOR_RED, COLOR_RED);
   //
-  // // for(int i=0; i < 2220; ++i)
-  //   // game->setMap(0, i, ' ');
+  // for(int i=0; i < maxX; ++i)
+	// 	map[0][i] = ' ';
   //
-  // // for(int i=0; i < 2220; ++i)
-  // // {
-  //   // game->setMap(1, i, '#');
-  //   // game->setMap(23, i, '#');
-  // // }
-  // // for(int a=2; a < 23; ++a)
-  // // {
-  //   // for(int b=0; b < 2220; ++b)
-  //   // {
-  //     // game->setMap(a, b, ' ');
-  //     // map[a][b] = ' ';
-  //   // }
-  //   // game->setMap(a, 10, '|');
-  //   // game->setMap(a, 11, '|');
-  //   // game->setMap(a, 12, '|');
-  // // }
-  // // for(int i=0; i < 2220; ++i)
-  //   // game->setMap(24, i, ' ');
+	// //loads map with top and bottom borders
+	// for(int i=0; i < maxX; ++i)
+	// {
+	// 	map[1][i] = '#';
+	// 	map[23][i] = '#';
+	// }
+	// //loads map with the inner game field
+	// for(int a=2; a < 23; ++a)
+	// {
+	// 	for(int b=0; b < maxX; ++b)
+	// 	{
+	// 		map[a][b] = ' ';
+	// 	}
+	// 	map[a][10] = '|';
+	// 	map[a][11] = '|';
+	// 	map[a][12] = '|';
+	// }
+	// for(int i=0; i < maxX; ++i)
+	// 	map[24][i] = ' ';
   //
-  // // game->setMap(posY, posX, 'P');
-  // // game->setMap(posY, posX + 1, '=');
+	// map[posY][posX] = 'P';
+	// map[posY][posX+1] = '=';
   //
   // getmaxyx(stdscr, maxY, maxX);
   // attron(COLOR_PAIR(5));
@@ -163,11 +145,10 @@ int main(void)
   //
   // curs_set(0);
 
-  bool quit = false;
-  int uIn;
   while (quit != true)
   {
-    std::cin >> uIn;
+    uIn = getch();
+    // std::cin >> uIn;
     // game->keyCommand(uIn);
     switch(uIn)
     {
@@ -176,15 +157,32 @@ int main(void)
           // game->getPlayer().getPos("Y") - 1 > 1)
         {
           map[posY][posX] = ' ';
-          map[posY][posX+1] = ' ';
+          map[posY][posX + 1] = ' ';
           --posY;
         }
         break;
       case KEY_DOWN:
-        if (posY + 1 < 23)
+        if (posY + 1 < maxY)
         {
           map[posY][posX] = ' ';
-          map[posY][posX+1] = ' ';
+          map[posY][posX + 1] = ' ';
+          ++posY;
+        }
+        break;
+      case KEY_LEFT:
+        if (posX - 1 > 1)
+          // game->getPlayer().getPos("Y") - 1 > 1)
+        {
+          map[posY][posX] = ' ';
+          map[posY][posX + 1] = ' ';
+          --posY;
+        }
+        break;
+      case KEY_RIGHT:
+        if (posX + 1 < maxX)
+        {
+          map[posY][posX] = ' ';
+          map[posY][posX + 1] = ' ';
           ++posY;
         }
         break;
@@ -205,8 +203,46 @@ int main(void)
       default:
         break;
     }
-  }
+    map[posY][posX] = 'P';
+		map[posY + 1][posX] = '|';
 
+		for(int i = 0; i < maxY - 1; ++i)
+			map[0][i] = ' ';
+
+		move(0, 0);
+		//displays the map
+		for(int a = 0; a < maxY; a++)
+			for(int b = 0; b < maxX; b++)
+			{
+				if(map[a][b] == ' ') attron(COLOR_PAIR(1) | A_BOLD);
+				else if(map[a][b] == 'P') attron(COLOR_PAIR(2) | A_BOLD);
+				else if(map[a][b] == '=') attron(COLOR_PAIR(4));
+				else if(map[a][b] == '*') attron(COLOR_PAIR(4));
+				else if(map[a][b] == '@') attron(COLOR_PAIR(6));
+				else if(map[a][b] == '%') attron(COLOR_PAIR(7) | A_BOLD);
+				else attron(COLOR_PAIR(2) | A_BOLD);
+				addch(map[a][b]);
+				standend();
+			}
+			attron(COLOR_PAIR(2) | A_BOLD);
+			mvprintw(maxX-1, 0, "Zombies killed: %i", 0);
+			attroff(COLOR_PAIR(2) | A_BOLD);
+
+		// for(int i=0; i < 100; ++i)
+			// ++zombies[i].balancer;
+	}
+  char text[] = " You lost... ";
+	attron(COLOR_PAIR(7) | A_BOLD);
+	mvprintw(maxX / 2, (maxY - sizeof(text)) / 2, "%s", text);
+	attroff(COLOR_PAIR(7) | A_BOLD);
+
+	//the player needs the press enter to quit (so he gets time to see how many zombies he killed)
+	timeout(-1);
+	do {
+		uIn = getch();
+	} while(uIn != 10);
+
+  endwin();
   delete game;
   return 0;
 }

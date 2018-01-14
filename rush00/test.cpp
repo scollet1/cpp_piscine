@@ -30,7 +30,7 @@ int main()
 
 	srand(time(0));
 
-	char map[1820][1400]; //the game map
+	char map[25][80]; //the game map
 	int posY = 11, posX = 5; //the game characters coordinates
 	bullet bullets[10]; //the bullets
 	zombie zombies[100]; //the zombies
@@ -90,8 +90,8 @@ int main()
 	map[posY][posX+1] = '=';
 
 	//print a startup message
-	char text1[] = "";
-	char text2[] = "";
+	char text1[] = "Zombie survival!";
+	char text2[] = "Made by Strupe321";
 	char text3[] = "Press any key to start";
 	int maxX, maxY;
 	getmaxyx(stdscr, maxY, maxX);
@@ -236,6 +236,7 @@ int main()
 						map[zombies[b].posY][zombies[b].posX] = '%';
 			}
 		}
+		//spawn a zombie
 		if(zombie_spawnbalancer >= zombie_spawnrate)
 		{
 			zombie_spawnbalancer = 0;
@@ -243,6 +244,7 @@ int main()
 			if(zombie_index == 99) zombie_index = 0;
 			else ++zombie_index;
 
+			//gradually speeds up how fast the zombies spawn
 			if(zombie_spawnrate >= 30) zombie_spawnrate -= 2;
 			else if(zombie_spawnrate < 30 && zombie_spawnrate > 10) --zombie_spawnrate;
 			else zombie_spawnrate = 10;
