@@ -15,15 +15,17 @@ NAME = 		ft_retro
 SRC = 		Bullet \
 			Character \
 			Enemy \
-			GameObject \
+			GameEntity \
 			main \
+			Game \
 			# xxx
 
 HDR =		Header \
 			Bullet \
 			Character \
 			Enemy \
-			GameObject
+			GameEntity \
+			Game
 
 SRC_DIR =		src/
 SRC_C =			$(addsuffix .cpp, $(SRC))

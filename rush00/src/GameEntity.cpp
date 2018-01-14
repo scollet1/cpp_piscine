@@ -37,7 +37,6 @@ GameEntity& GameEntity::operator=(GameEntity const& rhs) {
     return *this;
 };
 
-
 /************ PUBLIC ************/
 
 // Getters
@@ -57,6 +56,20 @@ bool         GameEntity::getDirection() const {
 bool         GameEntity::getAliveStatus() const {
     return _alive;
 };
+
+int GameEntity::getMaxY(void) {
+  return _maxY;
+}
+
+int GameEntity::getMaxX(void) {
+  return _maxX;
+}
+
+// Setters
+
+void         GameEntity::setAliveStatus(bool status) {
+  _alive = status;
+}
 
 // Methods
 

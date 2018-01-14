@@ -25,12 +25,11 @@ protected:
     unsigned int _speedCD;
 
     void         initBullets();
-    void         triggerDeath();
 
-    Enemy() {};
 
 public:
 
+    Enemy() {};
     Enemy(int x, unsigned int hp, unsigned int atkDmg, unsigned int bulletSpeed);
     Enemy(Enemy const& rhs);
     Enemy& operator=(Enemy const& rhs);
@@ -41,8 +40,9 @@ public:
     unsigned int getSpeedCoolDown() const;
 
     // Methods
-
-    void         updateObject();
+    void         triggerDeath();
+    void         activateEnemy(int y, int x);
+    void         updateObject(int y, int x);
 };
 
 
@@ -57,7 +57,7 @@ private:
 
 public:
 
-    EnDebris(int x);    
+    EnDebris(int x);
     EnDebris(EnDebris const& rhs);
     EnDebris& operator=(EnDebris const& rhs);
     ~EnDebris() {};
@@ -65,7 +65,7 @@ public:
 
 
 /******************************************************************************/
-// Scrub-Tier 
+// Scrub-Tier
 
 class EnScrub : public Enemy {
 
@@ -74,7 +74,7 @@ private:
     EnScrub() {};
 
 public:
-    
+
     EnScrub(int x);
     EnScrub(EnScrub const& rhs);
     EnScrub& operator=(EnScrub const& rhs);
@@ -92,7 +92,7 @@ private:
     EnPro() {};
 
 public:
-    
+
     EnPro(int x);
     EnPro(EnPro const& rhs);
     EnPro& operator=(EnPro const& rhs);
@@ -110,7 +110,7 @@ private:
     EnGod() {};
 
 public:
-    
+
     EnGod(int x);
     EnGod(EnGod const& rhs);
     EnGod& operator=(EnGod const& rhs);

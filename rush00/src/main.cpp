@@ -16,129 +16,297 @@
 #include "Character.hpp"
 #include "GameEntity.hpp"
 
-void play(Player *player, Enemy *enemies, Game *game)
+void play(Game *game)
 {
   int i;
+  int j;
   int uIn;
+  int eKilled = 0;
+  char pause[] = " GAME OVER ";
 
-  while (player->getAliveStatus())
+  uIn = getch();
+  std::cout << "play entered" << std::endl;
+  while (game->getPlayer().getAliveStatus())
   {
+    usleep(30000);
+    timeout(0); // don't block for user
     uIn = getch();
+
+    /*
+      NOTE : CAPTURE USER INPUT AND ROUTE COMMANDS
+    */
+
     switch (uIn)
     {
       case KEY_UP:
-        if (player->getPosY() - 1 > 1)
+        if (game->getPlayer().getPosY() - 1 > 1)
         {
-          game->setMapN(player->getPosY(), player->getPosX(), ' ');
-          game->setMapN(player->getPosY(), player->getPosX() - 1, ' ');
-          player->updateObject(0, -1);
+          game->setMap(game->getPlayer().getPosY(), game->getPlayer().getPosX(), ' ');
+          game->getPlayer().updateObject(-1, 0);
         }
         break;
       case KEY_DOWN:
-        if (player->getPosY() + 1 < game->getMaxY())
+        if (game->getPlayer().getPosY() + 1 < game->getMaxY() - 1)
         {
-          game->setMapN(player->getPosY(), player->getPosX(), ' ');
-          game->setMapN(player->getPosY(), player->getPosX() - 1, ' ');
-          player->updateObject(0, 1);
+          game->setMap(game->getPlayer().getPosY(), game->getPlayer().getPosX(), ' ');
+          game->getPlayer().updateObject(1, 0);
         }
         break;
       case KEY_LEFT:
-        if (player->getPosX() - 1 > 1)
+        if (game->getPlayer().getPosX() - 1 > 1)
         {
-          game->setMapN(player->getPosY(), player->getPosX(), ' ');
-          game->setMapN(player->getPosY(), player->getPosX() - 1, ' ');
-          player->updateObject(-1, 0);
+          game->setMap(game->getPlayer().getPosY(), game->getPlayer().getPosX(), ' ');
+          game->getPlayer().updateObject(0, -1);
         }
         break;
       case KEY_RIGHT:
-        if (player->getPosX() + 1 < game->getMaxX())
+        if (game->getPlayer().getPosX() + 1 < game->getMaxX() - 1)
         {
-          game->setMapN(player->getPosY(), player->getPosX(), ' ');
-          game->setMapN(player->getPosY(), player->getPosX() - 1, ' ');
-          player->updateObject(1, 0);
+          game->setMap(game->getPlayer().getPosY(), game->getPlayer().getPosX(), ' ');
+          game->getPlayer().updateObject(0, 1);
         }
         break;
       case ' ':
-        player->shootBullet();
+        game->getPlayer().shootBullet(); // currently not shooting projectile but activates on keypress
+        // exit(1); // TESTING SEGFAULT
         break;
-      case 27:
-        player->setAliveStatus(false);
+      case 'p':
+        move(0, 0);
+    	  attron(COLOR_PAIR(7) | A_BOLD);
+    	  mvprintw(game->getMaxX() / 2, (game->getMaxX() - sizeof(pause)) / 2, "%s", pause);
+    	  attroff(COLOR_PAIR(7) | A_BOLD);
+        do {
+          uIn = getch();
+        } while(uIn != 'p');
+        break;
+      case KEY_END:
+        game->getPlayer().setAliveStatus(false); // currently doesn't exit properly
         break;
       default:
         break;
     }
-    game->setMapN(player->getPosY(), player->getPosX(), 'A');
 
-    for (i = 0; !enemies[i].getSpeedCoolDown(); i++)
-      enemies[i].updateObject();
-    for (i = 0; !player->getBullet(i)->getAliveStatus(); i++)
-      player->getBullet(i)->updateObject();
+    /*
+      NOTE : CHECK ENEMY ALIVE STATUS
+    */
 
+    // exit(1); // TESTING SEGFAULT
+
+    for (i = game->getMaxY() - 1; i >= 0; --i) // pre-increment
+      for (j = game->getMaxX() - 1; j >= 0; --j) { // pre-increment
+
+        // exit(1); // TESTING SEGFAULT
+
+        if (game->getEnemy(i, j).getAliveStatus()) {
+
+          // exit(1); // TESTING SEGFAULT
+
+          /*
+            NOTE : WIPE LAST POSITION AND UPDATE OBJECT
+          */
+
+          // exit(1); // TESTING SEGFAULT
+
+          int ey = game->getEnemy(i, j).getPosY();
+          int ex = game->getEnemy(i, j).getPosX();
+          if (game->getMap(i + 1, j) != '|' && game->getMap(i + 1, j) != 'A') {
+            if (i >= game->getMaxY() - 4) {
+              game->getEnemy(i, j).setAliveStatus(false);
+              game->setMap(i, j, ' ');
+              continue ;
+            }
+            game->setMap(ey, ex, ' ');
+            game->getEnemy(ey, ex).updateObject(1, 0);
+            game->getEnemy(i + 1, j).activateEnemy(i + 1, j);
+            game->setMap(i + 1, j, 'W');
+          } else if (game->getMap(i + 1, j) == '|') {
+            game->setMap(i, j, '*');
+            eKilled++;
+          } else if (game->getMap(i + 1, j) == 'A') {
+            exit(1);
+            game->setMap(game->getPlayer().getPosY(), game->getPlayer().getPosX(), ' ');
+            game->getPlayer().setAliveStatus(false);
+          }
+          // game->setMap(game->getEnemy(ey, ex).getPosY()),
+          // game->getEnemy(ey + 1, ex).getPosX(), 'W');
+
+          // game->getEnemy(game->getEnemy(ey, ex).getPosY(),
+          // game->getEnemy(ey + 1, ex).setAliveStatus(true);
+
+          game->getEnemy(ey, ex).setAliveStatus(false);
+
+        } else if (std::rand() % 1000 == 1 && i == 2) {
+
+          /*
+            NOTE : RANDOM CHANCE TO SPAWN ENEMIES
+          */
+
+          // exit(1); // TESTING SEGFAULT
+
+          int r = std::rand() % (game->getMaxX() - 2);
+          if (!game->getEnemy(2, r).getAliveStatus()) {
+            game->getEnemy(i, j).activateEnemy(i, j);
+            game->setMap(i, r, 'W');
+          }
+        } else {
+          game->setMap(i, j, ' ');
+        }
+        /*else if (!game->getEnemy(i, j).getAliveStatus()) {
+          game->getEnemy(i, j).setAliveStatus(true);
+          if (game->getMap(i, j) != '|') {
+            game->setMap(i, j, 'W');
+          } else {
+            game->setMap(i, j, ' ');
+            game->getEnemy(i, j).setAliveStatus(false);
+            eKilled++;
+          }
+        }*/
+
+          // else if (!game->getEnemy(i, j).getAliveStatus()) {
+          // game->setMap(i, j, ' ');
+          // game->getEnemy(i, j).triggerDeath();
+        // }
+
+        // std::cerr << game->getEnemy(i, j).getAliveStatus() << std::endl;*/
+      }
+
+    /*
+      NOTE : CHECK BULLET ALIVE STATUS
+    */
+
+    for (i = 0; i < MAX_BULLETS; i++)
+    {
+      if (game->getPlayer().getBullet(i)->getAliveStatus()) {
+        int by = game->getPlayer().getBullet(i)->getPosY();
+        int bx = game->getPlayer().getBullet(i)->getPosX();
+
+        /*
+          NOTE : SET BULLET PREVIOUS POSITION TO EMPTY && UPDATE BULLET OBJECT POSITION
+        */
+
+        // exit(1); // TESTING SEGFAULT
+        game->setMap(by, bx, ' ');
+        // exit(1); // TESTING SEGFAULT
+        game->getPlayer().getBullet(i)->updateObject(-1, 0);
+        // exit(1); // TESTING SEGFAULT
+        game->setMap(game->getPlayer().getBullet(i)->getPosY(),
+        game->getPlayer().getBullet(i)->getPosX(), '|');
+
+        /*
+          NOTE : CHECK IF BULLET INTERSECTS WITH ENEMY OR LEAVES SCREEN
+        */
+
+        // exit(1); // TESTING SEGFAULT
+
+        if (game->getEnemy(game->getPlayer().getBullet(i)->getPosY(),
+        game->getPlayer().getBullet(i)->getPosX()).getAliveStatus()) {
+          game->getEnemy(game->getPlayer().getBullet(i)->getPosY(),
+          game->getPlayer().getBullet(i)->getPosX()).takeDamage(game->getPlayer().getAtkDmg());
+          game->setMap(game->getPlayer().getBullet(i)->getPosY(),
+          game->getPlayer().getBullet(i)->getPosX(), '*');
+          eKilled++;
+        } else if (game->getPlayer().getBullet(i)->getPosY() < 2) {
+          game->getPlayer().getBullet(i)->deactivateBullet();
+          game->setMap(game->getPlayer().getBullet(i)->getPosY(),
+          game->getPlayer().getBullet(i)->getPosX(), ' ');
+        }
+      }
+    }
+
+    /*
+      NOTE : SET PLAYER'S NEW POSITION
+    */
+
+    game->setMap(game->getPlayer().getPosY(), game->getPlayer().getPosX(), 'A');
 		move(0, 0);
+
+    // exit(1); // TESTING SEGFAULT
+
+    /*
+      NOTE : BUFFER OUTPUT FOR PRINTING
+    */
 
 		for (int a = 0; a < game->getMaxY(); a++)
 			for (int b = 0; b < game->getMaxX(); b++)
 			{
-				// if (game->getMapN(a, b) attron(COLOR_PAIR(1) | A_BOLD);
-				if (game->getMapN(a, b) == 100)
-        {
+        if (game->getMap(a, b) == 'W')
           attron(COLOR_PAIR(2) | A_BOLD);
-          addch('A');
+        else if (game->getMap(a, b) == 'A')
+          attron(COLOR_PAIR(1) | A_BOLD);
+        else if (game->getMap(a, b) == '\'')
+          attron(COLOR_PAIR(1) | A_BOLD);
+        else if (game->getMap(a, b) == ' ')
+          attron(COLOR_PAIR(4) | A_BOLD);
+        else if (game->getMap(a, b) == '|')
+          attron(COLOR_PAIR(3) | A_BOLD);
+        else if (game->getMap(a, b) == '*') {
+          attron(COLOR_PAIR(7) | A_BOLD);
         }
-				else if (game->getMapN(a, b) == -1)
-        {
-          addch('|');
-          attron(COLOR_PAIR(4));
-        }
-        else if (game->getMapN(a, b) >= 0 && game->getMapN(a, b) < 100)
-        {
-          addch('#');
-          attron(COLOR_PAIR(6));
-        }
-				// else if (game->getMapN(a, b) == ) attron(COLOR_PAIR(4));
-				// else if (game->getMapN(a, b) == '@') attron(COLOR_PAIR(6));
-				// else if (game->getMapN(a, b) == '%') attron(COLOR_PAIR(7) | A_BOLD);
-				else attron(COLOR_PAIR(2) | A_BOLD);
-				// addch(game->getMapN(a, b).getCh());
-				standend();
+        addch(game->getMap(a, b));
 			}
-			attron(COLOR_PAIR(2) | A_BOLD);
-			mvprintw(game->getMaxX() - 1, 0, "Enemies killed: %i", 0);
-			attroff(COLOR_PAIR(2) | A_BOLD);
-	}
+    // exit(1); // TESTING SEGFAULT
+    /*for (i = 0; i < MAX_BULLETS - 1; i++)
+    {
+      if (game->getPlayer().getBullet(i)->getAliveStatus()) {
+        // exit(1); // TESTING SEGFAULT
+        attron(COLOR_PAIR(5));
+        // exit(1); // TESTING SEGFAULT
+        mvprintw((game->getMaxY() / 2), (game->getMaxX() - sizeof(TEST_DISPLAY_BULLETS_WORKING))
+        / 2, "%s", TEST_DISPLAY_BULLETS_WORKING);
+        // exit(1); // TESTING SEGFAULT
+        attroff(COLOR_PAIR(5));
+      } else {
+        // exit(1); // TESTING SEGFAULT
+
+        attron(COLOR_PAIR(5));
+        mvprintw((game->getMaxY() / 2), (game->getMaxX() - sizeof(TEST_DISPLAY_BULLETS_NOT_WORKING))
+        / 2, "%s", TEST_DISPLAY_BULLETS_NOT_WORKING);
+        attroff(COLOR_PAIR(5));
+      }
+    }*/
+		attron(COLOR_PAIR(6) | A_BOLD);
+    mvprintw(game->getMaxY() - 4, 2, "|| ======================================== ||");
+		mvprintw(game->getMaxY() - 3, 2, "|| Enemies killed : %d ", eKilled);
+    mvprintw(game->getMaxY() - 3, 27, "|=====| Lives : %d  ||", game->getPlayer().getLives());
+    mvprintw(game->getMaxY() - 2, 2, "|| ======================================== ||");
+		attroff(COLOR_PAIR(6) | A_BOLD);
+  }
   return ;
 }
 
 int main(void)
 {
   // init
+  int uIn;
   std::srand(std::time(nullptr));
   initscr();
   start_color();
 	cbreak();
 	noecho();
-	keypad(stdscr, TRUE);
-  init_pair(1, COLOR_GREEN, COLOR_BLUE);
-	init_pair(2, COLOR_WHITE, COLOR_BLUE);
-	init_pair(3, COLOR_YELLOW, COLOR_GREEN);
-	init_pair(4, COLOR_BLACK, COLOR_GREEN);
+	keypad(stdscr, true);
+  init_pair(1, COLOR_BLUE, COLOR_BLACK); // PLAYER
+	init_pair(2, COLOR_RED, COLOR_BLACK); // ENEMY
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK); // BULLET
+	init_pair(4, COLOR_WHITE, COLOR_BLACK); // BACKGROUND
 	init_pair(5, COLOR_BLUE, COLOR_BLACK);
-	init_pair(6, COLOR_RED, COLOR_GREEN);
-	init_pair(7, COLOR_RED, COLOR_RED);
+	init_pair(6, COLOR_RED, COLOR_BLACK);
+	init_pair(7, COLOR_RED, COLOR_BLACK);
 
 	int maxX, maxY;
-  int i;
+  // int i;
   getmaxyx(stdscr, maxY, maxX);
   int posY = maxY - 5, posX = maxX / 2;
 
+  std::cout << "game obj init" << std::endl;
   Game *game = new Game(maxY, maxX);
-  Player *player = new Player();
-  EnScrub *enemies = new EnScrubc [MAX_ENEMIES];
+  game->buildMaps(maxY, maxX);
+  std::cout << "game compiles" << std::endl;
 
-  game->setMapN(posX, posY, player);
+  const char menuTextName[] = "ft_retro!";
+  const char menuTextAuth[] = "SCollet:JChow";
+  const char menuTextInst[] = "Press any key to continue...";
 
-  for (i = 0; i < MAX_ENEMIES; i++)
-    game->setMapN(enemies[i].getPosX(), enemies[i].getPosY(), i);
+  std::cout << "strings declared" << std::endl;
 
   attron(COLOR_PAIR(5));
   mvprintw((maxY / 2) - 2, (maxX - sizeof(menuTextName)) / 2, "%s", menuTextName);
@@ -151,37 +319,42 @@ int main(void)
 
 	curs_set(0);
 
-  for (int i = 0; i < maxX; ++i)
-         map[0][i] = ' ';
-
-  for (int i = 0; i < maxY; ++i)
+  /*for (i = 0; i < maxX; i++)
+    game->setMap(0, i, ' ');
+  std::cout << "game compiles" << std::endl;
+  for (i = 0; i < maxY; i++)
   {
-     map[i][maxX - 5] = '/';
-     map[i][maxX - 2] = '/';
-  }
-  for (int a = 2; a < maxY - 2; ++a)
-     for (int b = 0; b < maxX; ++b)
-         map[a][b] = ' ';
-  for (int i = 0; i < maxX; ++i)
-     map[maxY - 1][i] = ' ';
-	map[posY][posX] = 'A';
+    game->setMap(i - 2, 0, '-');
+    game->setMap(i - 2, 0, '-');
+  }*/
+  std::cout << "before stacking map" << std::endl;
+  for (int a = 0; a < maxY - 1; a++)
+    for (int b = 0; b < maxX - 1; b++)
+    {
+      // std::cout << a << b << std::endl;
+      game->setMap(a, b, ' ');
+    }
+  std::cout << "before setting player" << std::endl;
+  // for (i = 0; i < maxX; i++)
+    // game->setMap(0, i, ' ');
+  game->setMap(posY, posX, 'A');
 
-  play(player, enemies, game);
+  play(game);
 
-  char text[] = " You lost... ";
+  char text[] = " GAME OVER ";
 	attron(COLOR_PAIR(7) | A_BOLD);
 	mvprintw(maxX / 2, (maxY - sizeof(text)) / 2, "%s", text);
 	attroff(COLOR_PAIR(7) | A_BOLD);
+  curs_set(0);
 
 	//the player needs the press enter to quit (so he gets time to see how many zombies he killed)
 	timeout(-1);
 	do {
 		uIn = getch();
-	} while(uIn != 10);
+	} while(uIn != KEY_END);
 
   endwin();
   // delete[] enemies;
-  delete player;
   delete game;
   return 0;
 }

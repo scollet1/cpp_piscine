@@ -19,6 +19,8 @@ class GameEntity {
 
 protected:
 
+    int          _maxY;
+    int          _maxX;
     int          _posX;
     int          _posY;
     bool         _direction;
@@ -35,10 +37,16 @@ public:
 
     // Getters
 
+    int          getMaxY(void);
+    int          getMaxX(void);
     int          getPosX() const;
     int          getPosY() const;
     bool         getDirection() const;
     bool         getAliveStatus() const;
+
+    // Setters
+
+    void         setAliveStatus(bool status);
 
     // Methods
 
@@ -47,8 +55,8 @@ public:
     // Must not be pure virtual (though effectively can be), otherwise class
     // GameEntity becomes an "abstract class", rendering allocation of child
     // classes (specifically Bullet for use in Character) impossible
-    virtual void updateObject() {}; 
-    virtual void updateObject(int x, int y) {(void)x;(void)y;}; 
+    // virtual void updateObject() {};
+    // virtual void updateObject(int x, int y) {(void)x;(void)y;};
 };
 
 #endif

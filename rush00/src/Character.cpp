@@ -80,10 +80,10 @@ Bullet*      Character::getBullet(int idx) const {
 void         Character::shootBullet() {
 
     for (int i = 0; i < MAX_BULLETS; i++) {
-
-        if (_bullets[i]->getAliveStatus() == true) {
-            _bullets[i]->activateBullet(_posX, _posY);
-            return;
+        // exit(1); // TESTING SEGFAULT
+        if (this->_bullets[i]->getAliveStatus() == false) {
+            this->_bullets[i]->activateBullet(_posY - 1, _posX);
+            return ;
         }
     }
 
@@ -123,12 +123,10 @@ void         Player::triggerDeath() {
     _lives -= 1;
 
     if (_lives == 0) {
-
         _alive = false;
-
     } else {
-        _posX = PLAYER_START_X;
-        _posY = PLAYER_START_Y;
+        _posX = _maxY - 5;
+        _posY = _maxX / 2;
         _hp = PLAYER_HP;
     }
 };
@@ -137,8 +135,8 @@ void         Player::triggerDeath() {
 
 // Coplien Methods
 
-Player::Player() :
-Character(PLAYER_START_X, PLAYER_START_Y, UP, PLAYER_HP, PLAYER_DAMAGE, PLAYER_BULLET_SPEED),
+Player::Player(int y, int x) :
+Character(x, y, UP, PLAYER_HP, PLAYER_DAMAGE, PLAYER_BULLET_SPEED),
  _lives(PLAYER_LIVES) {
 
     Player::initBullets();
@@ -174,11 +172,9 @@ unsigned int Player::getLives() const {
 
 // Methods
 
-void         Player::updateObject(int x, int y) {
-
-
-    (void)x;(void)y;
-
+void         Player::updateObject(int y, int x) {
+  _posX += x;
+  _posY += y;
+  return ;
     // Move the player and stuff
-
 };

@@ -74,7 +74,7 @@ private:
 
 public:
 
-    Player();
+    Player(int y, int x);
     Player(Player const& rhs);
     Player& operator=(Player const& rhs);
     ~Player() {};
@@ -85,7 +85,7 @@ public:
 
     // Methods
 
-    void         updateObject(int x, int y);
+    void         updateObject(int y, int x);
 };
 
 #endif

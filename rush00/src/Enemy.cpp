@@ -28,8 +28,7 @@ void Enemy::initBullets() {
 };
 
 void Enemy::triggerDeath() {
-
-    delete this;
+    setAliveStatus(false);
 };
 
 
@@ -44,6 +43,14 @@ _speedCD(ENEMY_CD) {
     Enemy::initBullets();
  };
 
+
+ void         Enemy::activateEnemy(int y, int x) {
+
+     _alive = true;
+     _posX = x;
+     _posY = y;
+     return ;
+ };
 
 Enemy::Enemy(Enemy const& rhs) {
     *this = rhs;
@@ -75,16 +82,16 @@ unsigned int Enemy::getSpeedCoolDown() const {
 
 // Methods
 
-void         Enemy::updateObject() {
+void         Enemy::updateObject(int y, int x) {
 
-    _speedCD -= 1;
-    if (_speedCD == 0) {
+    // _speedCD -= 1;
+    // if (_speedCD == 0) {
 
-        int dir = (_direction == UP ? 1 : -1);
-        _posX += 1 * dir;
-        _posY += 1 * dir;
+        // int dir = (_direction == UP ? 1 : -1);
+        _posX += x;
+        _posY += y;
         _speedCD = ENEMY_CD;
-    }
+    // }
 
 };
 
@@ -131,7 +138,7 @@ EnDebris& EnDebris::operator=(EnDebris const& rhs) {
 
 // Coplien Methods
 
-EnScrub::EnScrub(int x): 
+EnScrub::EnScrub(int x):
 Enemy(x, SCRUB_HP, SCRUB_ATK_DMG, SCRUB_BULLET_SPD) {};
 
 EnScrub::EnScrub(EnScrub const& rhs) {
@@ -165,7 +172,7 @@ EnScrub& EnScrub::operator=(EnScrub const& rhs) {
 
 // Coplien Methods
 
-EnPro::EnPro(int x): 
+EnPro::EnPro(int x):
 Enemy(x, PRO_HP, PRO_ATK_DMG, PRO_BULLET_SPD) {};
 
 EnPro::EnPro(EnPro const& rhs) {
@@ -199,7 +206,7 @@ EnPro& EnPro::operator=(EnPro const& rhs) {
 
 // Coplien Methods
 
-EnGod::EnGod(int x): 
+EnGod::EnGod(int x):
 Enemy(x, GOD_HP, GOD_ATK_DMG, GOD_BULLET_SPD) {};
 
 EnGod::EnGod(EnGod const& rhs) {

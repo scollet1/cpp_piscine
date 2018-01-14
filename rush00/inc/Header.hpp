@@ -13,15 +13,21 @@
 #ifndef HEADER_HPP
 # define HEADER_HPP
 
+// TESTING
+
+# define TEST_DISPLAY_BULLETS_WORKING "TEST DISPLAY BULLETS WORKING"
+# define TEST_DISPLAY_BULLETS_NOT_WORKING "TEST DISPLAY BULLETS NOT WORKING"
+
 // Player Stats
 # define PLAYER_LIVES        3
 # define PLAYER_BULLET_SPEED 3
-# define PLAYER_START_X      0
-# define PLAYER_START_Y      0
+// # define PLAYER_START_X      0
+// # define PLAYER_START_Y      0
 # define PLAYER_HP           1
 # define PLAYER_DAMAGE       1
-# define PLAYER_START_Y      0
+// # define PLAYER_START_Y      0
 # define MAX_BULLETS         10
+# define MAX_ENEMIES         25
 
 // General Enemy Stats
 # define ENEMY_CD            10

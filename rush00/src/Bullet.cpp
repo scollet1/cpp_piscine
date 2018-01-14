@@ -62,18 +62,18 @@ unsigned int Bullet::getSpeedCoolDown() const {
 
 // Methods
 
-void         Bullet::activateBullet(int x, int y) {
+void         Bullet::activateBullet(int y, int x) {
 
     _alive = true;
     _posX = x;
     _posY = y;
-
+    return ;
 };
 
 void         Bullet::deactivateBullet() {
 
     _alive = false;
-
+    return ;
 };
 
 void         Bullet::hitTarget(Character& target) {
@@ -82,15 +82,9 @@ void         Bullet::hitTarget(Character& target) {
     deactivateBullet();
 };
 
-void         Bullet::updateObject() {
-
-    _speedCD -= 1;
-    if (_speedCD == 0) {
-
-        int dir = (_direction == UP ? 1 : -1);
-        _posX += 1 * dir;
-        _posY += 1 * dir;
-        _speedCD = _speed;
-    }
-
-}; 
+void         Bullet::updateObject(int y, int x) {
+    _posX += x;
+    _posY += y;
+    _speedCD = PLAYER_BULLET_SPEED;
+    return ;
+};

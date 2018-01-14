@@ -10,28 +10,43 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef GAME_HPP
+# define GAME_HPP
+
 #include <ncurses.h>
 #include <string>
 #include <ctime>
 #include <cstdlib>
 #include <unistd.h>
 #include <iostream>
+#include "Enemy.hpp"
 #include "Character.hpp"
 
+
 class Game {
+
 public:
-  Game(void);
+  Game(int y, int x);
   ~Game(void);
 
   bool isRunning(void);
   void keyCommand(int num);
   void terminate(int err);
-  // Player & getPlayer(void);
-  void setMap(int X, int Y, char c);
-  char getMap(int X, int Y);
-  void buildMap(int sizeX, int sizeY);
+  int getMaxY(void);
+  int getMaxX(void);
+  void setMap(int y, int x, char ch);
+  char getMap(int y, int x);
+  Enemy & getEnemy(int y, int x);
+  void buildMaps(int sizey, int sizex);
+  Player& getPlayer(void);
+
 private:
-  bool _running;
-  // Player _player;
-  char **map;
+  int     _maxX;
+  int     _maxY;
+  bool    _running;
+  Player  *_player;
+  char    **_map;
+  Enemy   **_enemies;
 };
+
+#endif

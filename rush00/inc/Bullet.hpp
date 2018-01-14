@@ -30,7 +30,6 @@ private:
     unsigned int _speed;
     unsigned int _speedCD;
     bool         _friendly;
-    bool         _alive;
 
     Bullet() {};
 
@@ -50,10 +49,10 @@ public:
 
     // Methods
 
-    void         activateBullet(int x, int y);
+    void         activateBullet(int y, int x);
     void         deactivateBullet();
     void         hitTarget(Character& target);
-    void         updateObject(); 
+    void         updateObject(int y, int x);
 
 };
 
