@@ -23,33 +23,51 @@
 void Enemy::initBullets() {
 
     for (int i = 0; i < MAX_BULLETS; i++) {
-        _bullets[i] = new Bullet(_atkDmg, _bulletSpeed, ENEMY);
+        _bullets[i] = new Bullet(_maxY, _maxX, _atkDmg, _bulletSpeed, ENEMY);
     }
 };
 
-void Enemy::triggerDeath() {
-    setAliveStatus(false);
-};
+void Enemy::triggerShootBullet() {
 
+    if ((rand() % 100) < (_enemyType * ENEMY_SHOOT_FREQ)) {
+        shootBullet();
+    }
+};
 
 /************* PUBLIC *************/
 
 // Coplien Methods
 
-Enemy::Enemy(int x, unsigned int hp, unsigned int atkDmg, unsigned int bulletSpeed) :
-Character(x, 0, DOWN, hp, atkDmg, bulletSpeed),
-_speedCD(ENEMY_CD) {
+Enemy::Enemy() {
 
+    Enemy::initBullets();
+};
+
+Enemy::Enemy(int x, int maxY, int maxX, unsigned int hp, unsigned int atkDmg, unsigned int bulletSpeed, unsigned int enemyType) :
+Character(CEILING, x, maxY, maxX, DOWN, hp, atkDmg, bulletSpeed),
+_speedCD(ENEMY_CD), _enemyType(enemyType) {
+
+    // std::cerr << "ENEMY GENERATED\n";
     Enemy::initBullets();
  };
 
 
- void         Enemy::activateEnemy(int y, int x) {
+void         Enemy::activateEnemy(int y, int x) {
+  _posX = x;
+  _posY = y;
+  _direction = 1;
+  _alive = true;
+  _speedCD = ENEMY_CD;
+  int et = std::rand() % 10;
 
-     _alive = true;
-     _posX = x;
-     _posY = y;
-     return ;
+
+  if (et <= 2) {
+    _hp = DEBRIS_HP;
+    _atkDmg = DEBRIS_ATK_DMG;
+    _bulletSpeed = DEBRIS_BULLET_SPD;
+    _enemyType = TYPE_DEBRIS;
+  }
+  return ;
  };
 
 Enemy::Enemy(Enemy const& rhs) {
@@ -63,11 +81,14 @@ Enemy& Enemy::operator=(Enemy const& rhs) {
     _bulletSpeed = rhs._bulletSpeed;
     _posX = rhs._posX;
     _posY = rhs._posY;
+    _maxY = rhs._maxY;
+    _maxX = rhs._maxX;
     _direction = rhs._direction;
     _alive = rhs._alive;
     _speedCD = rhs._speedCD;
+    _enemyType = rhs._enemyType;
 
-    for (int i = 0; i < MAX_BULLETS; i++) {
+    for (int i = 0; i < 1; i++) {
         _bullets[i] = rhs._bullets[i];
     }
 
@@ -80,19 +101,36 @@ unsigned int Enemy::getSpeedCoolDown() const {
     return _speedCD;
 };
 
+unsigned int Enemy::getEnemyType() const {
+    return _enemyType;
+};
+
 // Methods
 
-void         Enemy::updateObject(int y, int x) {
+void         Enemy::updateObject() {
 
-    // _speedCD -= 1;
-    // if (_speedCD == 0) {
-
-        // int dir = (_direction == UP ? 1 : -1);
-        _posX += x;
-        _posY += y;
+    _speedCD -= 1;
+    if (_speedCD == 0) {
+        _posY += (_direction ? -1 : 1);
         _speedCD = ENEMY_CD;
-    // }
 
+        if (_posY == _maxY - 5) {
+            // triggerRealDeath();
+            triggerDeath();
+            // delete this;
+            return;
+        }
+
+       triggerShootBullet();
+    }
+};
+
+void Enemy::triggerRealDeath() {
+    delete this;
+};
+
+void Enemy::triggerDeath() {
+    _alive = false;
 };
 
 
@@ -104,8 +142,8 @@ void         Enemy::updateObject(int y, int x) {
 
 // Coplien Methods
 
-EnDebris::EnDebris(int x):
-Enemy(x, DEBRIS_HP, DEBRIS_ATK_DMG, DEBRIS_BULLET_SPD) {};
+EnDebris::EnDebris(int x, int maxY, int maxX):
+Enemy(x, maxY, maxX, DEBRIS_HP, DEBRIS_ATK_DMG, DEBRIS_BULLET_SPD, TYPE_DEBRIS) {};
 
 EnDebris::EnDebris(EnDebris const& rhs) {
     *this = rhs;
@@ -118,9 +156,12 @@ EnDebris& EnDebris::operator=(EnDebris const& rhs) {
     _bulletSpeed = rhs._bulletSpeed;
     _posX = rhs._posX;
     _posY = rhs._posY;
+    _maxY = rhs._maxY;
+    _maxX = rhs._maxX;
     _direction = rhs._direction;
     _alive = rhs._alive;
     _speedCD = rhs._speedCD;
+    _enemyType = rhs._enemyType;
 
     for (int i = 0; i < MAX_BULLETS; i++) {
         _bullets[i] = rhs._bullets[i];
@@ -138,8 +179,8 @@ EnDebris& EnDebris::operator=(EnDebris const& rhs) {
 
 // Coplien Methods
 
-EnScrub::EnScrub(int x):
-Enemy(x, SCRUB_HP, SCRUB_ATK_DMG, SCRUB_BULLET_SPD) {};
+EnScrub::EnScrub(int x, int maxY, int maxX):
+Enemy(x, maxY, maxX, SCRUB_HP, SCRUB_ATK_DMG, SCRUB_BULLET_SPD, TYPE_SCRUB) {};
 
 EnScrub::EnScrub(EnScrub const& rhs) {
     *this = rhs;
@@ -152,9 +193,12 @@ EnScrub& EnScrub::operator=(EnScrub const& rhs) {
     _bulletSpeed = rhs._bulletSpeed;
     _posX = rhs._posX;
     _posY = rhs._posY;
+    _maxY = rhs._maxY;
+    _maxX = rhs._maxX;
     _direction = rhs._direction;
     _alive = rhs._alive;
     _speedCD = rhs._speedCD;
+    _enemyType = rhs._enemyType;
 
     for (int i = 0; i < MAX_BULLETS; i++) {
         _bullets[i] = rhs._bullets[i];
@@ -172,8 +216,8 @@ EnScrub& EnScrub::operator=(EnScrub const& rhs) {
 
 // Coplien Methods
 
-EnPro::EnPro(int x):
-Enemy(x, PRO_HP, PRO_ATK_DMG, PRO_BULLET_SPD) {};
+EnPro::EnPro(int x, int maxY, int maxX):
+Enemy(x, maxY, maxX, PRO_HP, PRO_ATK_DMG, PRO_BULLET_SPD, TYPE_PRO) {};
 
 EnPro::EnPro(EnPro const& rhs) {
     *this = rhs;
@@ -186,9 +230,12 @@ EnPro& EnPro::operator=(EnPro const& rhs) {
     _bulletSpeed = rhs._bulletSpeed;
     _posX = rhs._posX;
     _posY = rhs._posY;
+    _maxY = rhs._maxY;
+    _maxX = rhs._maxX;
     _direction = rhs._direction;
     _alive = rhs._alive;
     _speedCD = rhs._speedCD;
+    _enemyType = rhs._enemyType;
 
     for (int i = 0; i < MAX_BULLETS; i++) {
         _bullets[i] = rhs._bullets[i];
@@ -206,8 +253,8 @@ EnPro& EnPro::operator=(EnPro const& rhs) {
 
 // Coplien Methods
 
-EnGod::EnGod(int x):
-Enemy(x, GOD_HP, GOD_ATK_DMG, GOD_BULLET_SPD) {};
+EnGod::EnGod(int x, int maxY, int maxX):
+Enemy(x, maxY, maxX, GOD_HP, GOD_ATK_DMG, GOD_BULLET_SPD, TYPE_GOD) {};
 
 EnGod::EnGod(EnGod const& rhs) {
     *this = rhs;
@@ -220,9 +267,12 @@ EnGod& EnGod::operator=(EnGod const& rhs) {
     _bulletSpeed = rhs._bulletSpeed;
     _posX = rhs._posX;
     _posY = rhs._posY;
+    _maxY = rhs._maxY;
+    _maxX = rhs._maxX;
     _direction = rhs._direction;
     _alive = rhs._alive;
     _speedCD = rhs._speedCD;
+    _enemyType = rhs._enemyType;
 
     for (int i = 0; i < MAX_BULLETS; i++) {
         _bullets[i] = rhs._bullets[i];

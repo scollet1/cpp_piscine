@@ -22,8 +22,8 @@
 
 // Coplien Methods
 
-Character::Character(int x, int y, bool direction, unsigned int hp, unsigned int atkDmg, unsigned int bulletSpeed):
-GameEntity(x, y, direction, ALIVE),
+Character::Character(int y, int x, int maxY, int maxX, bool direction, unsigned int hp, unsigned int atkDmg, unsigned int bulletSpeed):
+GameEntity(y, x, maxY, maxX, direction, ALIVE),
 _hp(hp), _atkDmg(atkDmg), _bulletSpeed(bulletSpeed) {};
 
 Character::Character(Character const& rhs) {
@@ -37,6 +37,8 @@ Character& Character::operator=(Character const& rhs) {
     _bulletSpeed = rhs._bulletSpeed;
     _posX = rhs._posX;
     _posY = rhs._posY;
+    _maxY = rhs._maxY;
+    _maxX = rhs._maxX;
     _direction = rhs._direction;
     _alive = rhs._alive;
 
@@ -49,7 +51,9 @@ Character& Character::operator=(Character const& rhs) {
 
 Character::~Character() {
 
+    // std::cerr << "Char deletion\n";
     for (int i = 0; i < MAX_BULLETS; i++) {
+        // std::cerr << "bullets getting rigaronid\n";
         delete _bullets[i];
     }
 };
@@ -80,9 +84,8 @@ Bullet*      Character::getBullet(int idx) const {
 void         Character::shootBullet() {
 
     for (int i = 0; i < MAX_BULLETS; i++) {
-        // exit(1); // TESTING SEGFAULT
         if (this->_bullets[i]->getAliveStatus() == false) {
-            this->_bullets[i]->activateBullet(_posY - 1, _posX);
+            this->_bullets[i]->activateBullet(_posY + (_direction ? -1 : 1), _posX);
             return ;
         }
     }
@@ -104,77 +107,6 @@ void         Character::takeDamage(unsigned int dmg) {
 };
 
 
-/*******************************************************************************
-***********************************  PLAYER  ***********************************
-*******************************************************************************/
-
-
-/************ PRIVATE ************/
-
-void    Player::initBullets() {
-
-    for (int i = 0; i < MAX_BULLETS; i++) {
-        _bullets[i] = new Bullet(_atkDmg, _bulletSpeed, ALLY);
-    }
-};
-
-void         Player::triggerDeath() {
-
-    _lives -= 1;
-
-    if (_lives == 0) {
-        _alive = false;
-    } else {
-        _posX = _maxY - 5;
-        _posY = _maxX / 2;
-        _hp = PLAYER_HP;
-    }
-};
-
-/************* PUBLIC *************/
-
-// Coplien Methods
-
-Player::Player(int y, int x) :
-Character(x, y, UP, PLAYER_HP, PLAYER_DAMAGE, PLAYER_BULLET_SPEED),
- _lives(PLAYER_LIVES) {
-
-    Player::initBullets();
-};
-
-Player::Player(Player const& rhs) {
-    *this = rhs;
-};
-
-Player& Player::operator=(Player const& rhs) {
-
-    _hp = rhs._hp;
-    _lives = rhs._lives;
-    _atkDmg = rhs._atkDmg;
-    _bulletSpeed = rhs._bulletSpeed;
-    _posX = rhs._posX;
-    _posY = rhs._posY;
-    _direction = rhs._direction;
-    _alive = rhs._alive;
-
-    for (int i = 0; i < MAX_BULLETS; i++) {
-        _bullets[i] = rhs._bullets[i];
-    }
-
-    return *this;
-};
-
-// Getters
-
-unsigned int Player::getLives() const {
-    return _lives;
-};
-
-// Methods
-
-void         Player::updateObject(int y, int x) {
-  _posX += x;
-  _posY += y;
-  return ;
-    // Move the player and stuff
-};
+// void        Character::triggerDeath() {
+//     delete this;
+// }

@@ -23,14 +23,16 @@ class Enemy : public Character {
 protected:
 
     unsigned int _speedCD;
+    unsigned int _enemyType;
 
     void         initBullets();
-
+    void         triggerShootBullet();
 
 public:
 
-    Enemy() {};
-    Enemy(int x, unsigned int hp, unsigned int atkDmg, unsigned int bulletSpeed);
+
+    Enemy();
+    Enemy(int x, int maxY, int maxX, unsigned int hp, unsigned int atkDmg, unsigned int bulletSpeed, unsigned int enemyType);
     Enemy(Enemy const& rhs);
     Enemy& operator=(Enemy const& rhs);
     virtual ~Enemy() {};
@@ -38,11 +40,13 @@ public:
     // Getters
 
     unsigned int getSpeedCoolDown() const;
+    unsigned int getEnemyType() const;
 
     // Methods
     void         triggerDeath();
+    void         triggerRealDeath();
     void         activateEnemy(int y, int x);
-    void         updateObject(int y, int x);
+    void         updateObject();
 };
 
 
@@ -57,7 +61,7 @@ private:
 
 public:
 
-    EnDebris(int x);
+    EnDebris(int x, int maxY, int maxX);
     EnDebris(EnDebris const& rhs);
     EnDebris& operator=(EnDebris const& rhs);
     ~EnDebris() {};
@@ -75,7 +79,7 @@ private:
 
 public:
 
-    EnScrub(int x);
+    EnScrub(int x, int maxY, int maxX);
     EnScrub(EnScrub const& rhs);
     EnScrub& operator=(EnScrub const& rhs);
     ~EnScrub() {};
@@ -93,7 +97,7 @@ private:
 
 public:
 
-    EnPro(int x);
+    EnPro(int x, int maxY, int maxX);
     EnPro(EnPro const& rhs);
     EnPro& operator=(EnPro const& rhs);
     ~EnPro() {};
@@ -111,7 +115,7 @@ private:
 
 public:
 
-    EnGod(int x);
+    EnGod(int x, int maxY, int maxX);
     EnGod(EnGod const& rhs);
     EnGod& operator=(EnGod const& rhs);
     ~EnGod() {};

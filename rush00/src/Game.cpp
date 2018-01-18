@@ -14,32 +14,30 @@
 
 Game::Game(int y, int x)
 {
-  this->_player = new Player(y - 5, x / 2);
+  this->_player = new Player(y - 10, x / 2, y, x);
   _maxY = y;
   _maxX = x;
-  // std::srand(std::time(nullptr));
-  // initscr();
-  // start_color();
-	// cbreak();
-	// noecho();
-	// keypad(stdscr, TRUE);
-  // init_pair(1, COLOR_GREEN, COLOR_GREEN);
-	// init_pair(2, COLOR_WHITE, COLOR_GREEN);
-	// init_pair(3, COLOR_yELLOW, COLOR_GREEN);
-	// init_pair(4, COLOR_BLACK, COLOR_GREEN);
-	// init_pair(5, COLOR_RED, COLOR_BLACK);
-	// init_pair(6, COLOR_RED, COLOR_GREEN);
-	// init_pair(7, COLOR_RED, COLOR_RED);
-  this->_running = true;
   return ;
 }
 
-Game::~Game(void)
-{
-  for (int i = 0; i < 1; ++i)
-    delete[] this->_map[i];
+Game::~Game(void) {
   return ;
 }
+
+Game::Game(Game const& rhs) {
+    *this = rhs;
+};
+
+Game& Game::operator=(Game const& rhs) {
+
+  _maxX = rhs._maxX;
+  _maxY = rhs._maxY;
+  _running = rhs._running;
+  _player = rhs._player;
+  _map = rhs._map;
+  _enemies = rhs._enemies;
+    return *this;
+};
 
 void Game::buildMaps(int sizey, int sizex)
 {
@@ -48,9 +46,9 @@ void Game::buildMaps(int sizey, int sizex)
   _enemies = new Enemy*[sizey];
   for (i = 0; i < sizey; i++)
     _enemies[i] = new Enemy[sizex];
-  this->_map = new char*[sizey];
+  _map = new char*[sizey];
   for (i = 0; i < sizey; i++)
-    this->_map[i] = new char[sizex];
+    _map[i] = new char[sizex];
   return ;
 }
 
@@ -66,7 +64,6 @@ int          Game::getMaxX(void)
 
 void Game::setMap(int y, int x, char ch)
 {
-  // this->_enemies[y][x].setAliveStatus(true);
   this->_map[y][x] = ch;
   return ;
 }
@@ -91,21 +88,8 @@ bool Game::isRunning(void)
   return this->_running;
 }
 
-void Game::terminate(int err)
-{
-  std::cout
-  << "Goodybe"
-  << std::endl;
-  exit(err);
-}
-
 void Game::keyCommand(int num)
 {
   num = 0;
   return ;
 }
-//
-// Player & Game::getPlayer(void)
-// {
-//   return this->_player;
-// }

@@ -19,10 +19,10 @@ class GameEntity {
 
 protected:
 
+    int          _posY;
+    int          _posX;
     int          _maxY;
     int          _maxX;
-    int          _posX;
-    int          _posY;
     bool         _direction;
     bool         _alive;
 
@@ -30,7 +30,7 @@ protected:
 
 public:
 
-    GameEntity(int x, int y, bool direction, bool alive);
+    GameEntity(int y, int x, int maxY, int maxX, bool direction, bool alive);
     GameEntity(GameEntity const& rhs);
     GameEntity& operator=(GameEntity const& rhs);
     virtual ~GameEntity() {};
@@ -55,8 +55,8 @@ public:
     // Must not be pure virtual (though effectively can be), otherwise class
     // GameEntity becomes an "abstract class", rendering allocation of child
     // classes (specifically Bullet for use in Character) impossible
-    // virtual void updateObject() {};
-    // virtual void updateObject(int x, int y) {(void)x;(void)y;};
+    virtual void updateObject() {};
+    virtual void updateObject(int x, int y) {(void)x;(void)y;};
 };
 
 #endif

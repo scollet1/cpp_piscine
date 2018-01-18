@@ -16,13 +16,13 @@
 *******************************  GAME OBJECT  **********************************
 *******************************************************************************/
 
-/************ PROTECTED ************/
+/************ PUBLIC ************/
 
 
 // Coplien methods
 
-GameEntity::GameEntity(int x, int y, bool direction, bool alive) :
-_posX(x), _posY(y), _direction(direction), _alive(alive) {};
+GameEntity::GameEntity(int y, int x, int maxY, int maxX, bool direction, bool alive) :
+_posY(y), _posX(x), _maxY(maxY), _maxX(maxX), _direction(direction), _alive(alive) {};
 
 GameEntity::GameEntity(GameEntity const& rhs) {
     *this = rhs;
@@ -32,12 +32,12 @@ GameEntity& GameEntity::operator=(GameEntity const& rhs) {
 
     _posX = rhs._posX;
     _posY = rhs._posY;
+    _maxY = rhs._maxY;
+    _maxX = rhs._maxX;
     _direction = rhs._direction;
     _alive = rhs._alive;
     return *this;
 };
-
-/************ PUBLIC ************/
 
 // Getters
 

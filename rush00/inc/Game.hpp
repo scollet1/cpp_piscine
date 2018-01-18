@@ -21,6 +21,7 @@
 #include <iostream>
 #include "Enemy.hpp"
 #include "Character.hpp"
+#include "Player.hpp"
 
 
 class Game {
@@ -28,6 +29,8 @@ class Game {
 public:
   Game(int y, int x);
   ~Game(void);
+  Game(Game const& rhs);
+  Game& operator=(Game const& rhs);
 
   bool isRunning(void);
   void keyCommand(int num);

@@ -35,7 +35,7 @@ private:
 
 public:
 
-    Bullet(unsigned int dmg, unsigned int speed, bool friendly);
+    Bullet(int maxY, int maxX, unsigned int dmg, unsigned int speed, bool friendly);
     Bullet(Bullet const& rhs);
     Bullet& operator=(Bullet const& rhs);
     ~Bullet() {};
@@ -52,7 +52,8 @@ public:
     void         activateBullet(int y, int x);
     void         deactivateBullet();
     void         hitTarget(Character& target);
-    void         updateObject(int y, int x);
+    void         updateObject();
+    void         setAtkDmg(int x);
 
 };
 

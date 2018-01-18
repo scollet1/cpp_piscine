@@ -36,11 +36,9 @@ protected:
     Character() {};
 
     virtual void initBullets() = 0;
-    virtual void triggerDeath() = 0;
-
 public:
 
-    Character(int x, int y, bool direction, unsigned int hp, unsigned int atkDmg, unsigned int bulletSpeed);
+    Character(int y, int x, int maxY, int maxX, bool direction, unsigned int hp, unsigned int atkDmg, unsigned int bulletSpeed);
     Character(Character const& rhs);
     Character& operator=(Character const& rhs);
     virtual ~Character();
@@ -56,36 +54,9 @@ public:
 
     void         shootBullet();
     void         takeDamage(unsigned int dmg);
+    virtual void triggerDeath() {};
 
-};
 
-
-/******************************************************************************/
-// Playable Human Character
-
-class Player : public Character {
-
-private:
-
-    unsigned int _lives;
-
-    void         initBullets();
-    void         triggerDeath();
-
-public:
-
-    Player(int y, int x);
-    Player(Player const& rhs);
-    Player& operator=(Player const& rhs);
-    ~Player() {};
-
-    // Getters
-
-    unsigned int getLives() const;
-
-    // Methods
-
-    void         updateObject(int y, int x);
 };
 
 #endif

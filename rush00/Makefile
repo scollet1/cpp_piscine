@@ -15,16 +15,17 @@ NAME = 		ft_retro
 SRC = 		Bullet \
 			Character \
 			Enemy \
+			Player \
 			GameEntity \
 			main \
-			Game \
-			# xxx
+			Game 
 
-HDR =		Header \
-			Bullet \
+HDR =		Bullet \
 			Character \
 			Enemy \
+			Player \
 			GameEntity \
+			Header \
 			Game
 
 SRC_DIR =		src/
@@ -36,7 +37,7 @@ OBJ_O =			$(addsuffix .o, $(SRC))
 OBJ_FILES =		$(addprefix $(OBJ_DIR), $(OBJ_O))
 
 HDR_DIR =		inc/
-HDR_H =			$(addsuffix .h, $(HDR))
+HDR_H =			$(addsuffix .hpp, $(HDR))
 HDR_FILES = 	$(addprefix $(HDR_DIR), $(HDR_H))
 
 CC =			clang++
