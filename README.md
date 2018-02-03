@@ -1,2 +1,2 @@
 # cpp_piscine
-heh
+Two weeks of C++ topics to introduce OOP coding standards.
