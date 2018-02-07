@@ -50,6 +50,7 @@ private:
   Player  *_player;
   char    **_map;
   Enemy   **_enemies;
+	NN *_nn;
 };
 
 #endif
