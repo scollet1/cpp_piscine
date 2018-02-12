@@ -26,7 +26,10 @@ HDR =		Bullet \
 			Player \
 			GameEntity \
 			Header \
-			Game
+			Game \
+			NN \
+			Neuron \
+			Layer
 
 SRC_DIR =		src/
 SRC_C =			$(addsuffix .cpp, $(SRC))
@@ -40,7 +43,7 @@ HDR_DIR =		inc/
 HDR_H =			$(addsuffix .hpp, $(HDR))
 HDR_FILES = 	$(addprefix $(HDR_DIR), $(HDR_H))
 
-CC =			clang++
+CC =			g++
 C_FLAGS =		-Wall -Wextra -Werror
 
 RED =				\033[31m
@@ -64,12 +67,12 @@ all: $(NAME)
 
 $(NAME): $(OBJ_FILES)
 	@echo "$(YELLOW_LIGHT)$(NAME): $(YELLOW)Compiling $(NAME)...$(END_COLOUR)"
-	@$(CC) $(C_FLAGS) $^ -o $@ -lncurses
+	@$(CC) $^ -o $@ -lncurses
 	@echo "$(YELLOW_LIGHT)$(NAME): $(GREEN)Successfully compiled $(NAME)!$(END_COLOUR)"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	@mkdir -p obj
-	@$(CC) $(C_FLAGS) -I $(HDR_DIR) -c $< -o $@
+	@$(CC) -I $(HDR_DIR) -c $< -o $@
 
 $(LIBFT_FILES): force
 	@make -C $(LIBFT_DIR)

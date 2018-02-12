@@ -15,6 +15,7 @@
 #include "Header.hpp"
 #include "Character.hpp"
 #include "GameEntity.hpp"
+#include "NN.hpp"
 
 void setMapEnemy(Game* game, int enemyType, int y, int x) {
 
@@ -49,7 +50,7 @@ void play(Game *game)
 
   Enemy** _en = new Enemy*[MAX_ENEMIES];
   for (int i = 0; i < MAX_ENEMIES; i++)
-    _en[i] = nullptr;
+    _en[i] = NULL;
 
 
   uIn = getch();
@@ -57,43 +58,45 @@ void play(Game *game)
   {
     usleep(30000);
     timeout(0); // don't block for user
-    uIn = getch();
+    //uIn = getch();
 
     /*
       NOTE : CAPTURE USER INPUT AND ROUTE COMMANDS
     */
 
+
+
     switch (uIn)
     {
-      case KEY_UP:
+      case 8:
         if (game->getPlayer().getPosY() - 2 > PLAYER_BORDER)
         {
           game->setMap(game->getPlayer().getPosY(), game->getPlayer().getPosX(), ' ');
           game->getPlayer().updateObject(-2, 0);
         }
         break;
-      case KEY_DOWN:
+      case 5:
         if (game->getPlayer().getPosY() + 2 < game->getMaxY() - PLAYER_BORDER)
         {
           game->setMap(game->getPlayer().getPosY(), game->getPlayer().getPosX(), ' ');
           game->getPlayer().updateObject(2, 0);
         }
         break;
-      case KEY_LEFT:
+      case 4:
         if (game->getPlayer().getPosX() - 1 > PLAYER_BORDER)
         {
           game->setMap(game->getPlayer().getPosY(), game->getPlayer().getPosX(), ' ');
           game->getPlayer().updateObject(0, -1);
         }
         break;
-      case KEY_RIGHT:
+      case 6:
         if (game->getPlayer().getPosX() + 1 < game->getMaxX() - PLAYER_BORDER)
         {
           game->setMap(game->getPlayer().getPosY(), game->getPlayer().getPosX(), ' ');
           game->getPlayer().updateObject(0, 1);
         }
         break;
-      case ' ':
+      case 0:
         game->getPlayer().shootBullet();
         break;
       case 'p':
@@ -136,7 +139,7 @@ void play(Game *game)
     // For Every Enemy we have
     for (int w = 0; w < MAX_ENEMIES; w++) {
       // If Enemy exists
-      if (_en[w] != nullptr) {
+      if (_en[w] != NULL) {
         // Update Enemy coordinates
         _en[w]->updateObject();
         // If Enemy off screen
@@ -144,7 +147,7 @@ void play(Game *game)
           // std::cerr <<"FUCK\n";
           delete _en[w];
           // std::cerr <<"SHIT\n";
-          _en[w] = nullptr;
+          _en[w] = NULL;
           continue;
         }
         // If Enemy collides with Player
@@ -192,7 +195,7 @@ void play(Game *game)
         // Check collision with enemies
         for (int w = 0; w < MAX_ENEMIES; w++) {
           // If enemy exists
-          if (_en[w] != nullptr) {
+          if (_en[w] != NULL) {
             // If bullet coordinates collide with enemy's
             if ((game->getPlayer().getBullet(b)->getPosX() == _en[w]->getPosX())
               && (game->getPlayer().getBullet(b)->getPosY() == _en[w]->getPosY())) {
@@ -206,7 +209,7 @@ void play(Game *game)
                 // Erase enemy from map
                 game->setMap(_en[w]->getPosY(), _en[w]->getPosX(), ' ');
                 delete _en[w];
-                _en[w] = nullptr;
+                _en[w] = NULL;
               }
               // Done with bullet here, stop iterating through enemies
               break;
@@ -276,7 +279,7 @@ void play(Game *game)
 
         // Find nullptr slot in array
         for (int w = 0; w < MAX_ENEMIES; w++) {
-          if (_en[w] == nullptr) {
+          if (_en[w] == NULL) {
 
             // Roll for enemy type
             int rand = std::rand() % 12;
@@ -377,7 +380,7 @@ void play(Game *game)
 int main(void)
 {
   int uIn;
-  std::srand(std::time(nullptr));
+  std::srand(std::time(NULL));
   initscr();
   start_color();
 	cbreak();
@@ -407,6 +410,8 @@ int main(void)
   const char endTextDisp[] = " GAME OVER ";
   const char endTextReset[] = " PRESS R TO PLAY AGAIN ";
   const char endTextInst[] = " PRESS END TO EXIT ";
+
+	Game.getNN() = new NN(4, 5, 3, 32);
 
   while (true) {
     Game *game = new Game(maxY, maxX);

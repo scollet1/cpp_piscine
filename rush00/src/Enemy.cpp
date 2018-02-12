@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "stdlib.h"
 #include "Header.hpp"
 #include "Enemy.hpp"
 
@@ -58,7 +59,7 @@ void         Enemy::activateEnemy(int y, int x) {
   _direction = 1;
   _alive = true;
   _speedCD = ENEMY_CD;
-  int et = std::rand() % 10;
+  int et = rand() % 10;
 
 
   if (et <= 2) {
