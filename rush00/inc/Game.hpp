@@ -22,6 +22,7 @@
 #include "Enemy.hpp"
 #include "Character.hpp"
 #include "Player.hpp"
+#include "NN.hpp"
 
 
 class Game {
@@ -42,6 +43,15 @@ public:
   Enemy & getEnemy(int y, int x);
   void buildMaps(int sizey, int sizex);
   Player& getPlayer(void);
+
+	NN *getNN() {return this->_nn;}
+
+	int getNearestEnemy(int x, int y) {
+		for (int i = y - 1; i >= 0; i--) {
+			if (getMap(i, x) != ' ' || getMap(i, x) != '|')
+				return (i);
+		}
+	}
 
 private:
   int     _maxX;

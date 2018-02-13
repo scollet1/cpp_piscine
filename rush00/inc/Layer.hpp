@@ -2,38 +2,49 @@
 # define LAYER_HPP
 
 # include "Header.hpp"
+# include "Neuron.hpp"
+# include <cstdlib>
+# include <stdlib.h>
 
 class Layer {
 private:
-	Nueron * neurons;
-	float _numNeurons;
+	Neuron * _neurons;
+	int _numNeurons;
 
 public:
-	Layer(int neurons) {
-		this._numNeurons = neurons;
-		neurons = new Neuron(neurons)[neurons];
-//		for (int i = 0; i < neurons; i++) {
-//			neuron
-//		} 
-	}~Layer(){}
+	Layer(int numNeurons) {
+		this->_numNeurons = numNeurons;
+		this->_neurons = new Neuron[numNeurons];
+		for (int i = 0; i < numNeurons; i++) {
+			this->_neurons[i] = Neuron(numNeurons);
+		} 
+	};~Layer(){};Layer(){};
 
-	public float sumAll(int index) {
+	Layer & operator=(const Layer & r) {
+		this->_numNeurons = r._numNeurons;
+		for (int i = 0; i < r._numNeurons; i++) {
+			this->_neurons[i] = r._neurons[i];
+		}
+	}
+
+	float sumAll(int index) {
 		float result = 0;
-		for (int i = 0; i < this._numNeurons(); i++) {
-			result += this._neurons[i].get("OUTPUT") * this._neurons[i].getWeight(index);
+		for (int i = 0; i < this->_numNeurons; i++) {
+			result += this->_neurons[i].get("OUTPUT") *
+			this->_neurons[i].getWeight(index);
 		}
 		return result;
 	}
 
-	public Neuron getNeuron(int index) {
-		return this._neurons[index];
+	Neuron getNeuron(int index) {
+		return this->_neurons[index];
 	}
 
-	public float get(std::string opt) {
-		if (opt.equals("NEURONS")) {
-			return this._numNeurons;
-		} else return null;
+	int get(std::string opt) {
+		if (opt == "NEURONS") {
+			return this->_numNeurons;
+		}
 	}
-}
+};
 
 #endif

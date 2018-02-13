@@ -13,10 +13,13 @@
 #ifndef HEADER_HPP
 # define HEADER_HPP
 
+# include <iostream>
+
 // TESTING
 
 # define TEST_DISPLAY_BULLETS_WORKING "TEST DISPLAY BULLETS WORKING"
 # define TEST_DISPLAY_BULLETS_NOT_WORKING "TEST DISPLAY BULLETS NOT WORKING"
+
 
 // Map Specs
 # define CEILING             2
@@ -30,6 +33,9 @@
 # define PLAYER_DAMAGE       1
 # define MAX_BULLETS         10
 # define MAX_ENEMIES         125
+
+// NN Constants
+# define MAX_REWARD		((PLAYER_LIVES * 10.0) + (PLAYER_MAX_HP * 5.0) + (5 * 50.0))
 
 // General Enemy Stats
 # define ENEMY_CD            8 //Movement speed

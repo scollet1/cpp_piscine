@@ -15,6 +15,7 @@
 Game::Game(int y, int x)
 {
   this->_player = new Player(y - 10, x / 2, y, x);
+	this->_nn = new NN(NUM_INPUTS, NUM_OUTPUTS, NEURONS_PER_LAYER, NUM_LAYERS);
   _maxY = y;
   _maxX = x;
   return ;

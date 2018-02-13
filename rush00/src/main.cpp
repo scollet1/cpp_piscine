@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "NN.hpp"
 #include "Game.hpp"
 #include "Enemy.hpp"
 #include "Header.hpp"
 #include "Character.hpp"
 #include "GameEntity.hpp"
-#include "NN.hpp"
 
 void setMapEnemy(Game* game, int enemyType, int y, int x) {
 
@@ -46,12 +46,13 @@ void play(Game *game)
 {
   int uIn;
   int eKilled = 0;
+	int gameTime = 0;
+	float inputs[4];
   char pause[] = " GAME PAUSED ";
 
   Enemy** _en = new Enemy*[MAX_ENEMIES];
   for (int i = 0; i < MAX_ENEMIES; i++)
     _en[i] = NULL;
-
 
   uIn = getch();
   while (game->getPlayer().getLives())
@@ -63,8 +64,11 @@ void play(Game *game)
     /*
       NOTE : CAPTURE USER INPUT AND ROUTE COMMANDS
     */
-
-
+	inputs[0] = (float)game->getPlayer().getPosY();
+	inputs[1] = (float)game->getPlayer().getPosX();
+	inputs[2] = (float)game->getNearestEnemy((int)inputs[1], (int)inputs[0]);
+	inputs[3] = (float)(game->getPlayer().getBullet(0)->getAliveStatus() == true)?1:0;
+	game->getNN()->forwardPropogate(inputs, gameTime);
 
     switch (uIn)
     {
@@ -308,6 +312,10 @@ void play(Game *game)
         for (j = game->getMaxX() - 1; j >= 0; --j) {
           game->getEnemy(i, j).setAliveStatus(false);
         }
+	game->getNN()->backwardPropogate(game->getNN()->calculateReward(
+					(int)game->getPlayer().getLives(),
+					(int)game->getPlayer().getHP(),
+					(int)game->getPlayer().getAtkDmg()));
       move(0, 0);
       char deadTextDisp[] = " YOU DIED ";
       char deadTextInst[] = " PRESS R TO RESPAWN OR END TO QUIT ";
@@ -373,6 +381,7 @@ void play(Game *game)
     mvprintw(game->getMaxY() - 2, 2, "\\|========================================================================|/");
 		attroff(COLOR_PAIR(6) | A_BOLD);
     if (uIn == KEY_END) break;
+	gameTime++;
   }
   return ;
 }
@@ -410,8 +419,6 @@ int main(void)
   const char endTextDisp[] = " GAME OVER ";
   const char endTextReset[] = " PRESS R TO PLAY AGAIN ";
   const char endTextInst[] = " PRESS END TO EXIT ";
-
-	Game.getNN() = new NN(4, 5, 3, 32);
 
   while (true) {
     Game *game = new Game(maxY, maxX);
